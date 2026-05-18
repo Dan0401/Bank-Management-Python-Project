@@ -9,7 +9,6 @@ class Bank:
     try:
         if Path(db_path).exists():
             with open(db_path, 'r') as fs:
-                print(fs.read())
                 data = json.loads(fs.read())
         else:
             print("Database file does not exist.")
@@ -20,8 +19,9 @@ class Bank:
 
     @staticmethod
     def update_database(data):
-        with open(Bank.db_path, 'a') as fs:
-            fs.write(json.dumps(Bank.data))
+        with open(Bank.db_path, 'w') as fs:
+            fs.write(json.dumps(data))
+            fs.flush()  #Force Windows/Python to immediately write the data to the file disk
 
 
 
@@ -61,7 +61,28 @@ class Bank:
                 print("Account creation cancelled.")
 
 
+    def deposit_money(self):
+        search_account_number = int(input("Enter the account number to deposit money into: "))
+        target_account_details = {}
 
+            #Loop through the list of dictionaries directly
+        for accounts_dict in Bank.data:
+                #Check the key for the current dictionary against the search account number
+            if accounts_dict["account_number"] == search_account_number:
+                target_account_details = accounts_dict
+        
+                deposit_amt = int(input("Enter the deposit amount: "))
+                target_account_details["balance"] += deposit_amt
+        
+                # Print the transaction details and update the database
+                print(f"Transaction successful: you have deposited Rs. {deposit_amt}. New balance: Rs. {target_account_details['balance']}")
+                Bank.update_database(Bank.data)
+                # 3. Stop looping since we found the account!
+                break 
+                
+        # 4. If the loop finishes and target_account_details is still empty
+        if not target_account_details:
+            print("Account not found")
 
 
 
@@ -80,6 +101,9 @@ option = input("Enter your choice (1-5): ")
 
 if option == '1':
     Bankobj.create_account()
+
+elif option == '2':
+    Bankobj.deposit_money()
 
 
 
