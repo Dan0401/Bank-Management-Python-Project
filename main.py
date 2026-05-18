@@ -63,29 +63,49 @@ class Bank:
 
     def deposit_money(self):
         search_account_number = int(input("Enter the account number to deposit money into: "))
-        target_account_details = {}
+        target_account_details = {}  #This will hold the details of the account dictionary we want to deposit into, if we find it in the database
 
-            #Loop through the list of dictionaries directly
+        #Loop through the list of dictionaries directly
         for accounts_dict in Bank.data:
-                #Check the key for the current dictionary against the search account number
+            #Check the key for the current dictionary against the search account number
             if accounts_dict["account_number"] == search_account_number:
                 target_account_details = accounts_dict
         
                 deposit_amt = int(input("Enter the deposit amount: "))
                 target_account_details["balance"] += deposit_amt
         
-                # Print the transaction details and update the database
+                #Print the transaction details and update the database
                 print(f"Transaction successful: you have deposited Rs. {deposit_amt}. New balance: Rs. {target_account_details['balance']}")
                 Bank.update_database(Bank.data)
-                # 3. Stop looping since we found the account!
+                #Stop looping since we found the account!
                 break 
                 
-        # 4. If the loop finishes and target_account_details is still empty
+        #If the loop finishes and target_account_details is still empty
         if not target_account_details:
             print("Account not found")
+    
+    def withdraw_money(self):
+        search_account_number = int(input("Enter the account number to withdraw money from: "))
+        target_account_details = {}  #This will hold the details of the account dictionary we want to withdraw from, if we find it in the database
 
+        #Loop through the list of dictionaries directly
+        for accounts_dict in Bank.data:
+            #Check the key for the current dictionary against the search account number
+            if accounts_dict["account_number"] == search_account_number:
+                target_account_details = accounts_dict
 
-
+                withdraw_amt = int(input("Enter the withdraw amount: "))
+                target_account_details["balance"] -= withdraw_amt
+                #Print the transaction details and update the database
+                print(f"Transaction successful: you have withdrawn Rs. {withdraw_amt}. New balance: Rs. {target_account_details['balance']}")
+                Bank.update_database(Bank.data)
+                
+                #Stop looping since we found the account!
+                break
+        
+        #If the loop finishes and target_account_details is still empty
+        if not target_account_details:
+            print("Account not found")
 
 Bankobj = Bank()
 
@@ -104,6 +124,8 @@ if option == '1':
 
 elif option == '2':
     Bankobj.deposit_money()
+elif option == '3':
+    Bankobj.withdraw_money()
 
 
 
