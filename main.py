@@ -121,8 +121,42 @@ class Bank:
         #If the loop finishes and target_account_details is still empty
         if not target_account_details:
             print("Account not found")
-                   
 
+
+    def update_account_info(self):
+        search_account_number = int(input("Enter the account number to update account information: "))
+        target_account_details = {}  #This will hold the details of the account dictionary we want to update, if we find it in the database
+        #Loop through the list of dictionaries directly
+        for accounts_dict in Bank.data:
+            #Check the key for the current dictionary against the search account number
+            if accounts_dict["account_number"] == search_account_number:
+                target_account_details = accounts_dict
+                print("Please select the information you want to update:")
+                print("Press 1 for Name")
+                print("Press 2 for Age")
+                print("Press 3 for Gender")
+                print("Press 4 for Mobile number")
+                print("Press 5 for Email")
+                option = input("Enter your choice (1-5): ")
+                if option == '1':
+                    target_account_details["name"] = input("Enter your new name: ")
+                elif option == '2':
+                    target_account_details["age"] = int(input("Enter your new age: "))
+                elif option == '3':
+                    target_account_details["gender"] = input("Enter your new gender 'M' or 'F' or 'NA': ")
+                elif option == '4':
+                    target_account_details["mobile_number"] = input("Enter your new mobile number: ")
+                elif option == '5':
+                    target_account_details["email"] = input("Enter your new email: ")
+                else:
+                    print("Invalid option. Please enter a number between 1 and 5.")
+                break
+        #If the loop finishes and target_account_details is still empty
+        if not target_account_details:
+            print("Account not found")
+        else:
+            Bank.update_database(Bank.data)
+            print("Account information updated successfully! Bye for now.")
 
 Bankobj = Bank()
 
@@ -145,6 +179,10 @@ elif option == '3':
     Bankobj.withdraw_money()
 elif option == '4':
     Bankobj.check_balance()
+elif option == '5':
+    Bankobj.update_account_info()
+else:
+    print("Invalid option. Please enter a number between 1 and 5.")
 
 
 
