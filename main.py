@@ -107,6 +107,23 @@ class Bank:
         if not target_account_details:
             print("Account not found")
 
+    def check_balance(self):
+        search_account_number = int(input("Enter the account number to check balance: "))
+        target_account_details = {}  #This will hold the details of the account dictionary we want to check balance for, if we find it in the database
+        #Loop through the list of dictionaries directly
+        for accounts_dict in Bank.data:
+            #Check the key for the current dictionary against the search account number
+            if accounts_dict["account_number"] == search_account_number:
+                target_account_details = accounts_dict
+                print(f"Your current balance is: Rs. {target_account_details['balance']}")
+                #Stop looping since we found the account!
+                break
+        #If the loop finishes and target_account_details is still empty
+        if not target_account_details:
+            print("Account not found")
+                   
+
+
 Bankobj = Bank()
 
 print("Welcome to the Dan's Bank Management System")
@@ -126,6 +143,8 @@ elif option == '2':
     Bankobj.deposit_money()
 elif option == '3':
     Bankobj.withdraw_money()
+elif option == '4':
+    Bankobj.check_balance()
 
 
 
